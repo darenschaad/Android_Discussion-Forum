@@ -3,18 +3,24 @@ package com.epicodus.discussionforum.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.epicodus.discussionforum.Constants;
 import com.epicodus.discussionforum.R;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private Firebase mEnteredCommentRef;
+    private ValueEventListener mEnteredCommentRefListener;
     @Bind(R.id.commentButton) Button mCommentButton;
     @Bind(R.id.commentEditText) EditText mCommentEditText;
     @Bind(R.id.viewCommentsButton) Button mViewCommentsButton;
@@ -28,6 +34,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mCommentButton.setOnClickListener(this);
         mViewCommentsButton.setOnClickListener(this);
+        mEnteredCommentRef = new Firebase(Constants.FIREBASE_URL_ENTERED_COMMENT);
+
+        mEnteredCommentRefListener =  mEnteredCommentRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String comments = dataSnapshot.getValue().toString();
+                Log.d("Comment updated", comments);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mEnteredCommentRef.removeEventListener(mEnteredCommentRefListener);
     }
 
     @Override
@@ -49,6 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void saveCommentToFirebase(String comment) {
         Firebase enteredCommentRef = new Firebase(Constants.FIREBASE_URL_ENTERED_COMMENT);
-        enteredCommentRef.setValue(comment);
+        enteredCommentRef.push().setValue(comment);
     }
 }

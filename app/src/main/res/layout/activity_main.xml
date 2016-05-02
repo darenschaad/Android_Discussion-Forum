@@ -35,8 +35,11 @@
         android:layout_height="wrap_content"
         android:text="Submit Comment"
         android:id="@+id/commentButton"
-        android:layout_below="@+id/commentEditText"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/viewCommentsButton"
+        android:layout_alignRight="@+id/commentEditText"
+        android:layout_alignEnd="@+id/commentEditText"
+        android:layout_alignLeft="@+id/commentEditText"
+        android:layout_alignStart="@+id/commentEditText" />
 
     <Button
         android:layout_width="wrap_content"
@@ -44,5 +47,8 @@
         android:text="View Comments"
         android:id="@+id/viewCommentsButton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/commentButton"
+        android:layout_alignStart="@+id/commentButton"
+        android:layout_alignRight="@+id/commentButton"
+        android:layout_alignEnd="@+id/commentButton" />
 </RelativeLayout>
